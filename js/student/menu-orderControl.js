@@ -1,26 +1,4 @@
 // js/menu-orderControl.js
-
-/**
- * Sipariş için rastgele bir takip kodu üretir (Örn: AB12)
- * Not: Veritabanı ID'si asıl kimliktir, bu görsel takip içindir.
- */
-function generateOrderNumber() {
-  const letters = "ABCDJKLP";
-  const numbers = "123456789";
-
-  let randomLetters = "";
-  for (let i = 0; i < 2; i++) {
-    randomLetters += letters.charAt(Math.floor(Math.random() * letters.length));
-  }
-
-  let randomNumbers = "";
-  for (let i = 0; i < 2; i++) {
-    randomNumbers += numbers.charAt(Math.floor(Math.random() * numbers.length));
-  }
-
-  return randomLetters + randomNumbers;
-}
-
 /**
  * Sepetteki ürünleri ve seçilen özelleştirmeleri save_order.php'ye gönderir.
  */

@@ -1,5 +1,5 @@
 <?php
-// add_product.php
+// personelin yeni ürün oluşturması
 header('Content-Type: application/json; charset=utf-8'); //sunucunun, tarayıcıya JSON tipinde veri gireceğini belirtir
 require 'db.php'; //veritabanını bağlayan dosyayı çağırdık.
 

@@ -58,7 +58,8 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 //Showing products after selected a category
-function showProducts(CategoryID) {
+async function showProducts(CategoryID) {
+  await fetchProducts(); // 1. Önce güncel ürün listesini API'den tekrar çekiyoruz
   menuContainer.style.display = "none";
   productContainer.style.display = "flex";
 

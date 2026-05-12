@@ -1,11 +1,37 @@
 :root {
-  --background-color: #121213;
-  --text-color: #15151d;
-  --text-white-color: #f4f1deb0;
-  --card-bg-color: #d8b15cdc;
-  --orderNum-bg-color: #f4f1de56;
-  --action-color: #c19355;
-  --action-active-color: #261b1b;
+  /* Arka Plan Renkleri */
+  --bg-dark: #121213;
+  --bg-glass: rgba(255, 255, 255, 0.1);
+  --bg-glass-heavy: rgba(255, 255, 255, 0.9);
+  --bg-card: rgba(0, 0, 0, 0.4);
+  --bg-container: rgba(0, 0, 0, 0.5);
+  --bg-input: #1e1e1e;
+  --bg-form: #2c2c2c;
+
+  /* Metin Renkleri */
+  --text-main: #15151d;
+  --text-white: #f4f1deb0;
+  --text-pure-white: #ffffff;
+  --text-muted: #888888;
+  --text-accent: #ed9277;
+
+  /* Aksiyon ve Durum Renkleri */
+  --action-primary: #c19355;
+  --action-hover: #261b1b;
+  --action-teal: rgba(22, 104, 102, 0.9);
+  --btn-product: #097c91;
+  --btn-warning: #f59e0b;
+  --btn-red: #ef4444;
+  --btn-delete: #c0392b;
+  --btn-add-gradient: linear-gradient(135deg, #c63d2f, #a12d22);
+  --btn-add-hover: linear-gradient(135deg, #e65100, #c63d2f);
+
+  /* Kenarlık ve Gölge Renkleri */
+  --border-light: rgba(255, 255, 255, 0.2);
+  --border-input: #444444;
+  --shadow-dark: rgba(0, 0, 0, 0.3);
+  --shadow-light: rgba(0, 0, 0, 0.05);
+  --accent-check: #9c1a15;
 }
 
 body {
@@ -19,7 +45,7 @@ body {
   background-image: url(../images/personnel-menu-bg.png);
   background-size: cover;
   background-attachment: fixed;
-  color: var(--text-color);
+  color: var(--text-main);
   cursor: default;
 }
 
@@ -30,8 +56,8 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 15px 25px;
-  background: rgba(255, 255, 255, 0.9);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  background: var(--bg-glass-heavy);
+  box-shadow: 0 4px 15px var(--shadow-light);
   margin-bottom: 20px;
   border-radius: 12px;
   backdrop-filter: blur(5px);
@@ -39,12 +65,12 @@ body {
 
 #personnel-id-display {
   font-weight: 700;
-  color: var(--text-color);
+  color: var(--text-main);
   font-size: 18px;
 }
 
 .top-bar-btns {
-  color: white;
+  color: var(--text-pure-white);
   border: none;
   padding: 10px 20px;
   margin-left: 15px;
@@ -56,21 +82,21 @@ body {
 }
 
 #product-btn {
-  background: #097c91;
+  background: var(--btn-product);
 }
 
 #close-register-btn {
-  background: #f59e0b;
+  background: var(--btn-warning);
 }
 
 #logout-btn {
-  background: #ef4444;
+  background: var(--btn-red);
 }
 
 #product-btn:hover,
 #close-register-btn:hover,
 #logout-btn:hover {
-  background: var(--action-active-color);
+  background: var(--action-hover);
 }
 
 .orderScreen,
@@ -87,33 +113,28 @@ h1 {
   display: flex;
   justify-content: center;
   align-items: center;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-
-  color: var(--text-color);
+  text-shadow: 2px 2px 4px var(--shadow-dark);
+  color: var(--text-main);
   margin-bottom: 20px;
 }
 
-/* Kanban Tahtası Düzeni */
 .kanban-board {
   display: flex;
   justify-content: space-between;
   gap: 25px;
 }
 
-/* Kolonlar (Glassmorphism - Buzlu Cam Efekti) */
 .kanban-column {
   flex: 1;
   display: flex;
   flex-direction: column;
-
-  /* Cam efekti ayarları */
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--bg-glass);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid var(--border-light);
   border-radius: 15px;
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
-  max-height: 80vh; /* Kolon ekranın %80'inden fazla uzayamaz */
+  box-shadow: 0 8px 32px 0 var(--shadow-dark);
+  max-height: 80vh;
   overflow: hidden;
   padding: 20px;
   min-height: 60vh;
@@ -122,55 +143,52 @@ h1 {
 
 .kanban-column h2 {
   text-align: center;
-  border-bottom: 2px solid rgba(255, 255, 255, 0.5);
+  border-bottom: 2px solid var(--border-light);
   padding-bottom: 10px;
   margin: 0 auto 20px auto;
   font-size: 1.5rem;
   width: 80%;
 }
 
-/* Sipariş Kartları */
 .order-item {
   display: flex;
   align-items: center;
   gap: 15px;
   margin-bottom: 15px;
   padding: 12px;
-  background: rgba(0, 0, 0, 0.4);
+  background: var(--bg-card);
   border-radius: 8px;
-  border-left: 4px solid #ed9277;
+  border-left: 4px solid var(--text-accent);
   font-size: 1.05rem;
   transition: transform 0.2s;
 }
 
 .order-item:hover {
-  transform: translateX(5px); /* Üzerine gelince hafif sağa kayma efekti */
+  transform: translateX(5px);
 }
 
-/* Checkbox Estetiği */
 .order-item input[type="checkbox"] {
   width: 22px;
   height: 22px;
   cursor: pointer;
-  accent-color: #9c1a15;
+  accent-color: var(--accent-check);
 }
 
-/* Aksiyon Butonları */
 .action-btn {
   margin-top: auto;
   padding: 12px;
   font-size: 1rem;
   cursor: pointer;
-  background-color: rgba(22, 104, 102, 0.9);
-  color: #fff;
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  background-color: var(--action-teal);
+  color: var(--text-pure-white);
+  border: 1px solid var(--border-light);
   border-radius: 8px;
   font-weight: bold;
   transition: all 0.3s ease;
 }
 
 .action-btn:hover {
-  background-color: #ed9277;
+  background-color: var(--text-accent);
   color: #000;
   transform: translateY(-2px);
   box-shadow: 0 5px 15px rgba(237, 146, 119, 0.4);
@@ -184,12 +202,10 @@ h1 {
   overflow-x: hidden;
   padding-right: 10px;
   margin-bottom: 15px;
-
   scrollbar-width: thin;
-  scrollbar-color: var(--action-color) rgba(4, 103, 21, 0.299);
+  scrollbar-color: var(--action-primary) rgba(4, 103, 21, 0.299);
 }
 
-/* --- Kaydırma Çubuğunun Estetiği (Custom Scrollbar) --- */
 #pending-list::-webkit-scrollbar,
 #preparing-list::-webkit-scrollbar,
 #completed-list::-webkit-scrollbar {
@@ -199,34 +215,32 @@ h1 {
 #pending-list::-webkit-scrollbar-track,
 #preparing-list::-webkit-scrollbar-track,
 #completed-list::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--bg-glass);
   border-radius: 10px;
 }
 
 #pending-list::-webkit-scrollbar-thumb,
 #preparing-list::-webkit-scrollbar-thumb,
 #completed-list::-webkit-scrollbar-thumb {
-  background: var(--action-color);
+  background: var(--action-primary);
   border-radius: 10px;
-  border: 2px solid rgba(0, 0, 0, 0.3);
+  border: 2px solid var(--shadow-dark);
 }
 
 #pending-list::-webkit-scrollbar-thumb:hover,
 #preparing-list::-webkit-scrollbar-thumb:hover,
 #completed-list::-webkit-scrollbar-thumb:hover {
-  background: var(--action-active-color);
+  background: var(--action-hover);
 }
 
-/*product control screen*/
-
 .product-container {
-  background: rgba(0, 0, 0, 0.5) !important;
+  background: var(--bg-container) !important;
   backdrop-filter: blur(20px) !important;
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid var(--border-light);
   border-radius: 20px;
   padding: 30px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 8px 32px var(--shadow-dark);
 }
 
 table,
@@ -245,8 +259,8 @@ td {
 }
 
 .product-list-btns {
-  background: #c0392b;
-  color: white;
+  background: var(--btn-delete);
+  color: var(--text-pure-white);
   border: none;
   padding: 5px;
   border-radius: 3px;
@@ -264,16 +278,16 @@ table.product-table {
 }
 
 .product-table thead th {
-  background-color: rgba(255, 255, 255, 0.1);
-  color: #ed9277 !important;
+  background-color: var(--bg-glass);
+  color: var(--text-accent) !important;
   font-weight: bold;
-  border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+  border-bottom: 2px solid var(--border-light);
   font-size: 20px;
 }
 
 .product-table tbody td {
-  color: white !important;
-  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  color: var(--text-pure-white) !important;
+  border: 1px solid var(--bg-glass) !important;
   padding: 12px 15px !important;
   background: transparent !important;
   font-size: 20px;
@@ -281,29 +295,22 @@ table.product-table {
 }
 
 .product-table tbody tr:hover {
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--bg-glass);
 }
 
-/* Personel Sipariş Kartı Tasarımı */
 .order-card {
-  border: 2px solid var(--blue-color);
+  border: 2px solid var(--btn-product);
   border-radius: 8px;
   padding: 15px;
   margin-bottom: 10px;
-  background: white;
+  background: var(--text-pure-white);
   color: #333;
   transition: transform 0.2s;
 }
 
-.order-card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
 .order-status-text {
   font-weight: bold;
-  color: var(--red-color);
+  color: var(--btn-delete);
 }
 
 .order-details-text {
@@ -312,36 +319,27 @@ table.product-table {
   color: #555;
 }
 
-.order-card-footer {
-  margin-top: 10px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
 .order-card hr {
   border: 0;
   border-top: 1px solid #eee;
   margin: 10px 0;
 }
 
-/* PRODUCT EKLEME */
 .add-product-form {
   display: flex;
   gap: 15px;
   align-items: center;
-  background-color: #2c2c2c;
+  background-color: var(--bg-form);
   padding: 20px;
   border-radius: 8px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 15px var(--shadow-dark);
 }
 
-/* Input ve Select Alanları Ortak Tasarımı */
 #new-p-name,
 #new-p-price,
 #new-p-category {
-  background-color: #1e1e1e;
-  border: 1px solid #444;
+  background-color: var(--bg-input);
+  border: 1px solid var(--border-input);
   border-radius: 5px;
   color: #e0e0e0;
   padding: 12px 15px;
@@ -349,30 +347,24 @@ table.product-table {
   outline: none;
   transition: all 0.3s ease;
   width: 100%;
-  /* Esneklik sağlar */
 }
 
-/* Hover ve Focus (Tıklanma) Durumu */
 #new-p-name:focus,
 #new-p-price:focus,
 #new-p-category:focus {
   border-color: #e65100;
-  /* Mevcut buton rengine yakın turuncu tonu */
   box-shadow: 0 0 8px rgba(230, 81, 0, 0.4);
   background-color: #252525;
 }
 
-/* Placeholder (İpucu Metni) Rengi */
 ::placeholder {
-  color: #888;
+  color: var(--text-muted);
   opacity: 1;
 }
 
-/* Select (Dropdown) için Özel Dokunuş */
 #new-p-category {
   cursor: pointer;
   appearance: none;
-  /* Varsayılan ok işaretini kaldırıp modern bir tane ekleyebilirsin */
   background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
   background-repeat: no-repeat;
   background-position: right 10px center;
@@ -380,14 +372,12 @@ table.product-table {
   padding-right: 40px;
 }
 
-/* Ekle Butonu Geliştirme */
 #add-product-btn {
-  background: linear-gradient(135deg, #c63d2f, #a12d22);
-  color: white;
+  background: var(--btn-add-gradient);
+  color: var(--text-pure-white);
   border: none;
   border-radius: 5px;
   padding: 12px 25px !important;
-  /* HTML'deki inline padding'i ezmek için */
   cursor: pointer;
   font-weight: bold;
   text-transform: uppercase;
@@ -399,7 +389,7 @@ table.product-table {
 }
 
 #add-product-btn:hover {
-  background: linear-gradient(135deg, #e65100, #c63d2f);
+  background: var(--btn-add-hover);
   transform: translateY(-2px);
   box-shadow: 0 5px 15px rgba(198, 61, 47, 0.4);
 }
@@ -408,11 +398,10 @@ table.product-table {
   transform: translateY(0);
 }
 
-/* Tablo içindeki inputlar için (Fiyat Güncelleme alanı) */
 .product-table input {
-  background: #1e1e1e;
+  background: var(--bg-input);
   border: 1px solid #333;
-  color: #fff;
+  color: var(--text-pure-white);
   padding: 5px 10px;
   border-radius: 4px;
   text-align: center;
