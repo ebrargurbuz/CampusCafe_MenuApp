@@ -12,10 +12,9 @@ const orderGrid = document.getElementById("order-grid");
 const badge = document.getElementById("cart-badge");
 
 const cartGrid = document.getElementById("cart-grid");
-const totalDisplay = document.getElementById("cart-total"); // ID komtrolü
+const totalDisplay = document.getElementById("cart-total");
 
-//finalizeorder
-const orderTotal = document.getElementById("order-total"); // ID komtrolü
+const orderTotal = document.getElementById("order-total");
 const orderNumDisplay = document.getElementById("orderNum");
 
 const categoryNames = {
@@ -26,7 +25,7 @@ const categoryNames = {
   5: "Desserts",
 };
 
-let dbProducts = []; // mockProducts yerine bu kullanılacak
+let dbProducts = [];
 
 // Sunucudan ürünleri çekmek için asenkron fonksiyon
 async function fetchProducts() {
@@ -70,7 +69,6 @@ async function fetchCustomizations() {
   }
 }
 
-// Mevcut DOMContentLoaded eventinin içini şu şekilde güncelle ki ikisini de çeksin:
 document.addEventListener("DOMContentLoaded", () => {
   fetchProducts();
   fetchCustomizations();
