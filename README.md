@@ -1,54 +1,106 @@
-# ☕ CampusCafe Menu App - Frontend
+# Relational Database Architecture: Client-Server Order Management System
 
-This repository contains the frontend source code for a web-based menu system developed for a university campus cafeteria. The application provides a seamless experience for students to place orders and a dedicated dashboard for personnel to manage them.
+This repository contains the relational database architecture and SQL implementation for a campus cafeteria ordering system. The project focuses on data integrity, entity inheritance (Supertype/Subtype modeling), and strict normalization up to the 3rd Normal Form (3NF).
 
-_*(Note: For database setup, tables, and backend configuration, please refer to the [Database Documentation](Database/README.md).)*_
+## 1. System Architecture & Entity-Relationship Model
 
-## ✨ Features (User Interface)
+The logical design is built upon standard relational database principles, utilizing specific architectural patterns to manage users, products, and complex order customizations.
 
-**Student/User Interface:**
+![Database ERD Architecture](Database/images/ERD.png)
 
-- Secure login using Student ID and password (`entrance.php`).
-- Dynamic, categorized menu layout (Hot Beverages, Cold Beverages, Bakery, Desserts, etc.).
-- Interactive product customization modals (selecting milk type, syrups, and sizes).
-- Real-time cart management and total price calculation.
-- Order confirmation page with unique Order ID generation (`menu.php`).
+### 1.1. Inheritance Model (Supertype / Subtype)
 
-**Personnel Control Panel:**
+To prevent data redundancy and maintain centralized authentication, the user hierarchy is modeled using a Supertype/Subtype architecture.
 
-- Dedicated login portal for cafeteria staff.
-- Real-time order tracking dashboard divided into Pending, Preparing, and Completed stages.
-- A Product Control Panel to update prices directly from the user interface.
+- **`USERS` (Supertype):** Encapsulates shared attributes like `Email` and `Password` for all system actors.
+- **`STUDENT` & `PERSONNEL` (Subtypes):** Inherit from the `USERS` table via a mandatory "is-a" relationship, holding only role-specific data (e.g., `StudentNo`, `RegistrationNum`).
 
-## 🛠️ Technologies Used
+### 1.2. Resolving N:M Relationships with Bridge Tables
 
-The frontend of this project was built using the following technologies:
+A single order can contain multiple products, and a single product can have multiple customizations (e.g., extra syrup, alternative milk type). This is managed via bridge tables:
 
-- **HTML5 & CSS3:** For page structuring, grid/flexbox layouts, and custom styling (buttons, product cards, hover effects).
-- **JavaScript:** To handle dynamic UI interactions such as cart logic, modal toggling, live price calculations, and seamless state updates.
-- **PHP:** Utilized for page routing, modularizing the UI components, and managing user/personnel sessions.
+- **`ORDER_DETAIL`:** Resolves the Many-to-Many relationship between `ORDER` and `PRODUCT`.
+- **`ORDER_DETAIL_CUSTOM`:** Connects specific order lines to the `CUSTOMIZATION` catalog, ensuring that extra parameters are strictly tied to a `DetailID`.
 
-## 📁 Folder Structure
+## 2. Normalization & Data Integrity
 
-The repository is organized with a clear and understandable architecture:
+The database schema is normalized to 3NF to eliminate anomalies, with one conscious engineering exception for performance.
 
-- `/images/`: Contains all static assets, background graphics, and product images used in the UI.
-- `/js/`: JavaScript files responsible for frontend logic (cart calculations, modals, etc.).
-- `/styles/`: CSS files that dictate the visual design and responsiveness of the application.
-- `entrance.php`: The main landing and authentication page for both students and personnel.
-- `menu.php`: The primary shopping interface where students browse and order.
-- `personnelSide.php`: The admin dashboard for staff to manage orders and inventory pricing.
+- **1NF (Atomic Values):** Order items are not stored as comma-separated strings. They are broken down into atomic rows within the `ORDER_DETAIL` table.
+- **2NF (No Partial Dependency):** Surrogate primary keys (e.g., `DetailID`, `DetailCustomID`) are utilized in bridge tables instead of composite keys to eliminate partial dependencies structurally.
+- **3NF (No Transitive Dependency):** Category names are isolated in a separate `CATEGORY` table. The `PRODUCT` table only holds the `CategoryID` foreign key, breaking the transitive dependency between a product and its category string.
+- **Intentional Denormalization:** The `TotalPrice` column in the `ORDER` table is a calculated field derived from `ORDER_DETAIL` (`Quantity * UnitPrice`). While strictly violating 3NF, this denormalization was implemented to reduce server load and avoid heavy `SUM()` aggregations during frequent read operations (e.g., listing past orders).
 
-## 🚀 Setup and Execution
+## 3. Core Database Operations (DML)
 
-To run the frontend smoothly, the project should be hosted on a local server environment (e.g., XAMPP, WAMP, or similar) and connected to the database.
+The system relies on complex SQL queries for data extraction and business intelligence reporting. Below are key examples of the implemented logic:
 
-1. Clone this repository: `git clone [https://github.com/edasahaan/CampusCafe_MenuApp.git]`
-2. Move the project folder into your local server's root directory (e.g., `htdocs` or `www`).
-3. Important: To set up the required database tables and connections, please follow the instructions in the [Database Documentation](Database/README.md) prepared by my teammate Ebrar Gürbüz.
-4. Open your web browser and navigate to `http://localhost/MenuApp/entrance.php` to launch the application.
+### Subquery: Identifying Premium Products
 
-## 📸 Screenshots
+Filters menu items that are priced above the overall catalog average by nesting an aggregate function within the `WHERE` clause.
 
-![Login Screen](images/entrance_example_image.jpg)
-![Personnel Dashboard](images/personnel_screen_example_image.jpg)
+```sql
+SELECT ProductName, Price
+FROM product
+WHERE Price > (SELECT AVG(Price) FROM product);
+```
+
+### Multi-Table INNER JOIN: Comprehensive Order History
+
+```sql
+SELECT s.StudentNo, o.OrderDate, p.ProductName, od.Quantity
+FROM student s
+INNER JOIN `order` o ON s.UserID = o.StudentID
+INNER JOIN order_detail od ON o.OrderID = od.OrderID
+INNER JOIN product p ON od.ProductID = p.ProductID;
+```
+
+### Utilizes GROUP BY and arithmetic operations on joined tables to generate business intelligence regarding total units sold and revenue per category.
+
+```sql
+SELECT c.CategoryName, SUM(od.Quantity) AS Total_Units_Sold,
+SUM(od.Quantity * od.UnitPrice) AS Total_Revenue
+FROM category c
+INNER JOIN product p ON c.CategoryID = p.CategoryID
+INNER JOIN order_detail od ON p.ProductID = od.ProductID
+GROUP BY c.CategoryName;
+```
+
+### Filters and retrieves orders strictly placed on the current system date using built-in temporal functions. This logic is essential for daily cafeteria operations and end-of-day financial reconciliations.
+
+```sql
+SELECT OrderID, OrderDate, TotalPrice
+FROM `order`
+WHERE DATE(OrderDate) = CURDATE();
+```
+
+### String Manipulation: Dynamic Username Generation
+
+Parses user email addresses to automatically generate standardized, uppercase usernames. This demonstrates server-side string manipulation and data formatting prior to client-side UI rendering.
+
+```sql
+SELECT UPPER(SUBSTRING_INDEX(Email, '@', 1)) AS Username
+FROM users;
+```
+
+## 4. Database Deployment & Initialization
+
+The complete physical database schema, including all CREATE TABLE statements, integrity constraints (CHECK, UNIQUE, FOREIGN KEY), and mock data insertions, is isolated in the `cafeteriaproject_db.sql` file.
+
+To spin up the database environment locally:
+
+1. Ensure you have a running MariaDB or MySQL server (e.g., via XAMPP, Docker, or standalone installation).
+
+2. Execute the `cafeteriaproject_db.sql` script within your database client (such as MySQL Workbench or phpMyAdmin).
+
+3. The script will automatically construct the relational architecture and populate the tables with testing data, allowing you to run the aforementioned DML queries immediately.
+
+
+---
+
+## 💻 Frontend Integration & UI Design
+
+The user interface (HTML/CSS/JS) and frontend logic for this application were designed and developed by my teammate Eda Şahan. 
+To view the frontend architecture, visual demo, and client-side source code, please visit the main frontend repository:
+
+👉 [View Frontend Repository by Eda Şahan](https://github.com/edasahaan/CampusCafe_MenuApp)
